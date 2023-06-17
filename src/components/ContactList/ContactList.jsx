@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact, fetchContacts } from 'redux/operations';
-import { getContacts, getFilter } from 'redux/selectors';
+import { selectContacts, selectStatusFilter } from 'redux/selectors';
+
+
 import css from './ContactList.module.css';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
-  const filtered = useSelector(getFilter);
+  const contacts = useSelector(selectContacts);
+  const filtered = useSelector(selectStatusFilter);
 
   const normalizedFilter = filtered.toLowerCase();
   const filteredContacts = contacts.filter(({ name }) =>
@@ -18,10 +21,6 @@ export const ContactList = () => {
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
-
-  console.log(normalizedFilter);
-  console.log(filteredContacts);
-  console.log(contacts);
 
   return (
     <ul className={css.contactList}>
@@ -45,5 +44,5 @@ export const ContactList = () => {
 
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.string),
-  onDeleteContact: PropTypes.func.isRequired,
+  onDeleteContact: PropTypes.func,
 };
